@@ -7,10 +7,14 @@ library(config)
 library(jsonlite)
 library(tidyverse)
 library(spotifyr)
-library(devtool)
-library(spotifyr)
+library(devtools)
+
 
 # 2 Data ----
+top_tracks_audio_features = 
+  read_rds("Data/top_tracks_audio_features.rds")
+top_artists = 
+  read_rds("Data/top_artists.rds")
 
 ## Spotify streaming history, following artists and inference labels
 StreamingHistory1 =
@@ -57,7 +61,6 @@ ins_reels_sentiments =
   ins_reels_sentiments$topics_your_reels_emotions
 
 ## Spotify API Authentication
-
 ### set the active configuration globally via Renviron.site or Rprofile.site
 Sys.setenv(R_CONFIG_ACTIVE = "default")
 config = config::get()
@@ -65,17 +68,6 @@ Sys.setenv(SPOTIFY_CLIENT_ID = config$client_id)
 Sys.setenv(SPOTIFY_CLIENT_SECRET = config$client_secret)
 access_token = get_spotify_access_token()
 
-get_my_top_artists_or_tracks(type = 'artists', time_range = 'long_term', limit = 10) %>% 
-  select(name, genres) %>% 
-  rowwise %>% 
-  mutate(genres = paste(genres, collapse = ', ')) %>% 
-  ungroup %>% 
-  kable()
+#source("R/Spotify.R")
 
-get_my_top_artists_or_tracks(type = 'tracks', time_range = 'long_term', limit = 10) %>% 
-  mutate(artist.name = map_chr(artists, function(x) x$name[1])) %>% 
-  select(name, artist.name, album.name) %>% 
-  kable()
-
-
- 
+# 3 Theme ----
